@@ -1,12 +1,22 @@
-import { Button } from '@/components/ui/button.tsx'
+import {
+  createBrowserRouter,
+  createRoutesFromChildren,
+  Route,
+  RouterProvider,
+} from 'react-router-dom'
+import Layout from '@/routes/_layout.tsx'
+import Index from '@/routes/index.tsx'
+
+const router = createBrowserRouter(
+  createRoutesFromChildren(
+    <Route path="/" element={<Layout />}>
+      <Route index element={<Index />} />
+    </Route>,
+  ),
+)
 
 function App() {
-  return (
-    <>
-      <p>nodecho-web</p>
-      <Button onClick={() => alert('Hello')}>Click Me</Button>
-    </>
-  )
+  return <RouterProvider router={router} />
 }
 
 export default App
