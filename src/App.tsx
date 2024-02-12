@@ -6,6 +6,9 @@ import {
 } from 'react-router-dom'
 import Layout from '@/routes/_layout.tsx'
 import Index from '@/routes/index.tsx'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
@@ -16,7 +19,11 @@ const router = createBrowserRouter(
 )
 
 function App() {
-  return <RouterProvider router={router} />
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  )
 }
 
 export default App
