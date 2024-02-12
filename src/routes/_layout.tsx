@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Sheet, SheetContent } from '@/components/ui/sheet.tsx'
 import { Sidebar } from '@/components/layout/Sidebar.tsx'
 import { Header } from '@/components/layout/Header.tsx'
+import { Footer } from '@/components/layout/Footer.tsx'
 
 export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -27,6 +28,8 @@ export default function Layout() {
         <main className="bg-[#4f5861] px-4 py-10 text-white sm:px-6 lg:px-8">
           <Outlet />
         </main>
+
+        <Footer />
       </div>
 
       <ScrollRestoration />
