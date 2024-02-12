@@ -20,7 +20,7 @@ export const Sidebar = React.forwardRef<
       {...props}
     >
       <div className="flex h-16 shrink-0 items-center">
-        <BoxIcon color="#00AEE7" />
+        <BoxIcon className="text-brand" />
       </div>
       <nav className="flex flex-1 flex-col">
         <ul role="list" className="flex flex-1 flex-col gap-y-7">

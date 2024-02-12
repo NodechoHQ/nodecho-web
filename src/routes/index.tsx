@@ -21,8 +21,8 @@ export default function IndexRoute() {
           <div className="flex grow flex-col gap-1">
             <h1 className="text-2xl">Manage Servers</h1>
             <p className="text-sm text-gray-400">
-              You have <span className="text-[#00aee7]">3 of 10</span> servers
-              in your account
+              You have <span className="text-brand">3 of 10</span> servers in
+              your account
             </p>
           </div>
 
@@ -37,7 +37,7 @@ export default function IndexRoute() {
               />
             </div>
 
-            <Button className="bg-[#00aee7] hover:bg-[#00aee7]/90">
+            <Button variant="brand">
               <PlusCircleIcon className="mr-2 size-5" />
               New Server
             </Button>
@@ -140,11 +140,11 @@ const progressIndicatorVariants = cva(
   {
     variants: {
       variant: {
-        idle: 'bg-green-500',
-        low: 'bg-[#00aee7]',
-        moderate: 'bg-yellow-500',
+        idle: 'bg-emerald-500',
+        low: 'bg-brand-500',
+        moderate: 'bg-amber-400',
         warning: 'bg-orange-500',
-        high: 'bg-red-500',
+        high: 'bg-red-600',
       },
     },
   },

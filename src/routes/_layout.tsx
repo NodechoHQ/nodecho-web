@@ -25,7 +25,7 @@ export default function Layout() {
           onClickMenu={() => setSidebarOpen(true)}
         />
 
-        <main className="bg-[#4f5861] px-4 py-10 text-white sm:px-6 lg:px-8">
+        <main className="bg-brand-background px-4 py-10 text-white sm:px-6 lg:px-8">
           <Outlet />
         </main>
 

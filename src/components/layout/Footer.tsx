@@ -99,7 +99,7 @@ export const Footer = React.forwardRef<
   return (
     <footer
       ref={ref}
-      className={cn('bg-[#475058]', className)}
+      className={cn('bg-brand-background-700', className)}
       aria-labelledby="footer-heading"
       {...props}
     >
