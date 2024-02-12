@@ -1,11 +1,24 @@
 import React from 'react'
 import { cn } from '@/lib/utils.ts'
-import { BoxIcon, HomeIcon, SettingsIcon } from 'lucide-react'
+import { BookOpenTextIcon, BoxIcon, HomeIcon, SettingsIcon } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 
-const navigation = [
+const navigations = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
+  {
+    name: 'Documentation',
+    href: '/docs',
+    icon: BookOpenTextIcon,
+    current: false,
+  },
 ]
+
+const settings: (typeof navigations)[number] = {
+  name: 'Settings',
+  href: '/settings',
+  icon: SettingsIcon,
+  current: false,
+}
 
 interface SidebarProps extends React.ComponentProps<'aside'> {}
 
@@ -26,54 +39,51 @@ export const Sidebar = React.forwardRef<
         <ul role="list" className="flex flex-1 flex-col gap-y-7">
           <li>
             <ul role="list" className="-mx-2 space-y-1">
-              {navigation.map((item) => (
+              {navigations.map((item) => (
                 <li key={item.name}>
-                  {/* TODO: Update primary color */}
-                  <NavLink
-                    to={item.href}
-                    className={({ isActive }) =>
-                      cn(
-                        isActive
-                          ? 'bg-gray-50 text-indigo-600'
-                          : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
-                        'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
-                      )
-                    }
-                  >
-                    {({ isActive }) => (
-                      <>
-                        <item.icon
-                          className={cn(
-                            isActive
-                              ? 'text-indigo-600'
-                              : 'text-gray-400 group-hover:text-indigo-600',
-                            'h-6 w-6 shrink-0',
-                          )}
-                          aria-hidden="true"
-                        />
-                        {item.name}
-                      </>
-                    )}
-                  </NavLink>
+                  <NavigationLink item={item} />
                 </li>
               ))}
             </ul>
           </li>
-          <li className="mt-auto">
-            {/* TODO: Change color based on `isActive` */}
-            <a
-              href="#"
-              className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
-            >
-              <SettingsIcon
-                className="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
-                aria-hidden="true"
-              />
-              Settings
-            </a>
+          <li className="-mx-2 mt-auto">
+            <NavigationLink item={settings} />
           </li>
         </ul>
       </nav>
     </aside>
   )
 })
+
+function NavigationLink({ item }: { item: (typeof navigations)[number] }) {
+  return (
+    <NavLink
+      to={item.href}
+      className={({ isActive }) =>
+        cn(
+          'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
+          isActive ? 'bg-gray-50' : 'hover:bg-gray-50',
+        )
+      }
+    >
+      {({ isActive }) => (
+        <>
+          <item.icon
+            className={cn(
+              'size-6 shrink-0',
+              isActive ? 'text-brand' : 'text-gray-400 group-hover:text-brand',
+            )}
+            aria-hidden="true"
+          />
+          <div
+            className={cn(
+              isActive ? 'text-brand' : 'text-gray-700 group-hover:text-brand',
+            )}
+          >
+            {item.name}
+          </div>
+        </>
+      )}
+    </NavLink>
+  )
+}
