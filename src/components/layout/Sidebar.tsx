@@ -4,7 +4,7 @@ import { BookOpenTextIcon, BoxIcon, HomeIcon, SettingsIcon } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 
 const navigations = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
+  { name: 'Dashboard', href: '/', icon: HomeIcon, current: true },
   {
     name: 'Documentation',
     href: '/docs',

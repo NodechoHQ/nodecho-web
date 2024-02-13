@@ -1,7 +1,8 @@
 import { Input } from '@/components/ui/input.tsx'
 import { PlusCircleIcon, TagIcon } from 'lucide-react'
-import { Button } from '@/components/ui/button.tsx'
+import { buttonVariants } from '@/components/ui/button.tsx'
 import { ServerList } from '@/components/server/ServerList.tsx'
+import { Link } from 'react-router-dom'
 
 const data = {
   serverCount: 3,
@@ -35,10 +36,13 @@ export default function IndexRoute() {
               />
             </div>
 
-            <Button variant="brand">
+            <Link
+              to="/servers/new"
+              className={buttonVariants({ variant: 'brand' })}
+            >
               <PlusCircleIcon className="mr-2 size-5" />
               New Server
-            </Button>
+            </Link>
           </div>
         </div>
 
