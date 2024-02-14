@@ -22,9 +22,11 @@ import {
 import { Separator } from '@/components/ui/separator.tsx'
 import { Input } from '@/components/ui/input.tsx'
 import { Checkbox } from '@/components/ui/checkbox.tsx'
-import { ChevronLeftIcon, MoveRightIcon } from 'lucide-react'
+import { ChevronLeftIcon, Loader2, MoveRightIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button.tsx'
 import { Slider } from '@/components/ui/slider.tsx'
+import { useMutation } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 const formSchema = z.object({
   name: z.string().min(1).max(255),
@@ -41,7 +43,11 @@ const formSchema = z.object({
   }),
 })
 
-export function NewServerForm() {
+type Props = {
+  onCreateServer: (data: { id: string; token: string }) => void
+}
+
+export function NewServerForm({ onCreateServer }: Props) {
   const navigate = useNavigate()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,9 +67,26 @@ export function NewServerForm() {
     },
   })
 
+  const { mutate: createServer, isPending: isCreatingServer } = useMutation({
+    mutationFn: async (data: z.infer<typeof formSchema>) => {
+      console.log(JSON.stringify(data, null, 2))
+      // FIXME: Replace with actual API call
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      return { id: 'mock_server_id', token: 'mock_token-mock_token-mock_token' }
+    },
+    onSuccess: (data) => {
+      onCreateServer(data)
+      toast.success('Server created')
+    },
+    onError: (error) => {
+      toast.error('Server creation failed', { description: error.message })
+    },
+  })
+
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(JSON.stringify(data, null, 2))
+    createServer(data)
   }
+
   return (
     <div className="flex flex-col justify-center">
       <Form {...form}>
@@ -260,8 +283,11 @@ export function NewServerForm() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit" variant="brand">
-                Create Server
+              <Button type="submit" variant="brand" disabled={isCreatingServer}>
+                {isCreatingServer && (
+                  <Loader2 className="mr-2 size-4 animate-spin" />
+                )}
+                {isCreatingServer ? 'Creating Server...' : 'Create Server'}
               </Button>
             </CardFooter>
           </Card>
@@ -270,7 +296,7 @@ export function NewServerForm() {
 
       <Button
         className="mx-auto mt-8 w-full max-w-[600px] bg-brand-background-700 text-slate-300 hover:bg-brand-background-600"
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/servers')}
       >
         <ChevronLeftIcon className="mr-2 size-4" />I don't want to create a new
         server

@@ -4,6 +4,7 @@ import { Sheet, SheetContent } from '@/components/ui/sheet.tsx'
 import { Sidebar } from '@/components/layout/Sidebar.tsx'
 import { Header } from '@/components/layout/Header.tsx'
 import { Footer } from '@/components/layout/Footer.tsx'
+import { Toaster } from 'sonner'
 
 export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -33,6 +34,8 @@ export default function Layout() {
       </div>
 
       <ScrollRestoration />
+
+      <Toaster richColors />
     </>
   )
 }
