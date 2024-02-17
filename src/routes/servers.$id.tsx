@@ -109,11 +109,14 @@ export default function ServerDetailRoute() {
         <div>
           <h2 className="text-2xl">{data.name}</h2>
           <div className="flex">
-            <div className="flex flex-wrap gap-x-4 gap-y-2">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <div className="flex items-center text-sm text-lime-500">
                 <div className="mr-2 size-4 rounded-full border-4 border-lime-500"></div>
-                Network data uptime {data.uptime} <DotIcon className="size-4" />
-                {data.availability}% Availability
+                <div className="gap-1 sm:flex sm:items-center">
+                  <div>Network data uptime {data.uptime}</div>
+                  <DotIcon className="hidden size-4 sm:inline" />
+                  <div>{data.availability}% Availability</div>
+                </div>
               </div>
               <div className="text-base text-gray-400">
                 Next update in{' '}
