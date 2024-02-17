@@ -20,6 +20,8 @@ import {
   YAxis,
 } from 'recharts'
 import { useParams } from 'react-router-dom'
+import { useState } from 'react'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs.tsx'
 
 const data = {
   name: 'Server Name',
@@ -69,9 +71,38 @@ const networkUsageData = [
   { name: '03:45', rx: 20, tx: 10 },
 ]
 
+const timeframeOptions = [
+  {
+    label: 'Monthly',
+    value: 'monthly',
+  },
+  {
+    label: 'Daily',
+    value: 'daily',
+  },
+  {
+    label: 'Hourly',
+    value: 'hourly',
+  },
+] as const
+
+type Timeframe = (typeof timeframeOptions)[number]['value']
+
 export default function ServerDetailRoute() {
   const { sid } = useParams()
   console.log('serverId: ', sid)
+
+  const [networkUsageTimeframe, setNetworkUsageTimeframe] =
+    useState<Timeframe>('hourly')
+
+  const handleNetworkUsageTimeframeChange = (value: string) => {
+    if (value === 'monthly' || value === 'daily' || value === 'hourly') {
+      setNetworkUsageTimeframe(value)
+    } else {
+      setNetworkUsageTimeframe('hourly')
+    }
+  }
+
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -178,13 +209,23 @@ export default function ServerDetailRoute() {
 
         {/* Network Usage */}
         <Card className="p-6">
-          <div className="flex items-baseline gap-2 text-slate-600">
-            <h3 className="text-2xl font-medium">Network Usage</h3>
-            <div>on eth0</div>
-            <div className="grow"></div>
-            <Button variant="ghost">Monthly</Button>
-            <Button variant="ghost">Daily</Button>
-            <Button variant="ghost">Hourly</Button>
+          <div className="flex flex-wrap gap-2">
+            <div className="flex grow items-baseline gap-2 text-slate-600">
+              <h3 className="text-2xl font-medium">Network Usage</h3>
+              <div>on eth0</div>
+            </div>
+            <Tabs
+              value={networkUsageTimeframe}
+              onValueChange={handleNetworkUsageTimeframeChange}
+            >
+              <TabsList>
+                {timeframeOptions.map((option) => (
+                  <TabsTrigger key={option.value} value={option.value}>
+                    {option.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
           </div>
           <Separator className="my-4" />
           <div className="my-8 h-60 w-full">
