@@ -1,10 +1,15 @@
 import React from 'react'
 import { cn } from '@/lib/utils.ts'
-import { BookOpenTextIcon, BoxIcon, HomeIcon, SettingsIcon } from 'lucide-react'
+import {
+  BookOpenTextIcon,
+  BoxIcon,
+  ServerIcon,
+  SettingsIcon,
+} from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 
 const navigations = [
-  { name: 'Dashboard', href: '/', icon: HomeIcon, current: true },
+  { name: 'Manage Servers', href: '/servers', icon: ServerIcon, current: true },
   {
     name: 'Documentation',
     href: '/docs',

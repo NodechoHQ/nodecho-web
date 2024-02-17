@@ -9,7 +9,7 @@ const data = {
   serverLimit: 10,
 }
 
-export default function IndexRoute() {
+export default function ServersRoute() {
   return (
     <>
       <div className="space-y-8">
