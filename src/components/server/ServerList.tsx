@@ -3,6 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton.tsx'
 import * as React from 'react'
 import { cn } from '@/lib/utils.ts'
 import { ServerCard } from '@/components/server/ServerCard.tsx'
+import { Link } from 'react-router-dom'
 
 const serverList = Array(10)
   .fill(0)
@@ -56,7 +57,9 @@ export function ServerList() {
   return (
     <ListContainer className="empty:hidden">
       {data.map((server) => (
-        <ServerCard key={server.id} idx={server.id} />
+        <Link to={`/servers/${server.id}`} key={server.id}>
+          <ServerCard idx={server.id} />
+        </Link>
       ))}
     </ListContainer>
   )
