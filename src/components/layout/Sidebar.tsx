@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { createContext } from 'react'
 import { cn } from '@/lib/utils.ts'
-import {
-  BookOpenTextIcon,
-  BoxIcon,
-  ServerIcon,
-  SettingsIcon,
-} from 'lucide-react'
+import { BookOpenTextIcon, ServerIcon, SettingsIcon } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
+import { SheetClose } from '@/components/ui/sheet.tsx'
+import { Logo } from '@/components/Logo.tsx'
+
+export const SideBarSheetContext = createContext(false)
+const useInSideBarSheet = () => React.useContext(SideBarSheetContext)
 
 const navigations = [
   { name: 'Manage Servers', href: '/servers', icon: ServerIcon, current: true },
@@ -31,16 +31,24 @@ export const Sidebar = React.forwardRef<
   React.ElementRef<'aside'>,
   SidebarProps
 >(({ className, ...props }, ref) => {
+  const isInSheet = useInSideBarSheet()
+
   return (
     <aside
       ref={ref}
       className={cn('flex grow flex-col gap-y-5 bg-white pb-4', className)}
       {...props}
     >
-      <div className="flex h-16 shrink-0 items-center">
-        <BoxIcon className="text-brand" />
-      </div>
       <nav className="flex flex-1 flex-col">
+        {/* Logo */}
+        {isInSheet ? (
+          <SheetClose asChild>
+            <Logo />
+          </SheetClose>
+        ) : (
+          <Logo />
+        )}
+        {/* Navigation */}
         <ul role="list" className="flex flex-1 flex-col gap-y-7">
           <li>
             <ul role="list" className="-mx-2 space-y-1">
@@ -61,7 +69,9 @@ export const Sidebar = React.forwardRef<
 })
 
 function NavigationLink({ item }: { item: (typeof navigations)[number] }) {
-  return (
+  const isInSheet = useInSideBarSheet()
+
+  const navLink = (
     <NavLink
       to={item.href}
       className={({ isActive }) =>
@@ -91,4 +101,8 @@ function NavigationLink({ item }: { item: (typeof navigations)[number] }) {
       )}
     </NavLink>
   )
+
+  if (!isInSheet) return navLink
+
+  return <SheetClose asChild>{navLink}</SheetClose>
 }

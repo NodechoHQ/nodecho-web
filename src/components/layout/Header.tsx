@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx'
+import { Logo } from '@/components/Logo.tsx'
 
 interface HeaderProps extends React.ComponentProps<'header'> {
   onClickMenu: () => void
@@ -34,6 +35,8 @@ export const Header = React.forwardRef<React.ElementRef<'header'>, HeaderProps>(
         </button>
 
         <Separator className="h-6 w-px lg:hidden" />
+
+        <Logo className="lg:hidden" />
 
         <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
           <div className="flex flex-1"></div>
