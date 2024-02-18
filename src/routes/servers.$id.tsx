@@ -94,6 +94,85 @@ const latencyData = [
   { name: '03:45', europe: 110, usa: 160, asia: 210 },
 ]
 
+const averageLoadData = [
+  { name: '02:48', system: 6, cpu: 3, disk_io: 2 },
+  { name: '02:51', system: 7, cpu: 4, disk_io: 3 },
+  { name: '02:54', system: 8, cpu: 5, disk_io: 4 },
+  { name: '02:57', system: 9, cpu: 6, disk_io: 5 },
+  { name: '03:00', system: 10, cpu: 7, disk_io: 6 },
+  { name: '03:03', system: 11, cpu: 8, disk_io: 7 },
+  { name: '03:06', system: 10, cpu: 7, disk_io: 6 },
+  { name: '03:09', system: 9, cpu: 6, disk_io: 5 },
+  { name: '03:12', system: 8, cpu: 5, disk_io: 4 },
+  { name: '03:15', system: 7, cpu: 4, disk_io: 3 },
+  { name: '03:18', system: 6, cpu: 3, disk_io: 2 },
+  { name: '03:21', system: 7, cpu: 4, disk_io: 3 },
+  { name: '03:24', system: 8, cpu: 5, disk_io: 4 },
+  { name: '03:27', system: 9, cpu: 6, disk_io: 5 },
+  { name: '03:30', system: 10, cpu: 7, disk_io: 6 },
+  { name: '03:33', system: 11, cpu: 8, disk_io: 7 },
+  { name: '03:36', system: 10, cpu: 7, disk_io: 6 },
+  { name: '03:39', system: 9, cpu: 6, disk_io: 5 },
+  { name: '03:42', system: 8, cpu: 5, disk_io: 4 },
+  { name: '03:45', system: 7, cpu: 4, disk_io: 3 },
+]
+
+const memoryUsageData = [
+  { name: '02:48', ram: 1024, swap: 256 },
+  { name: '02:51', ram: 1024, swap: 256 },
+  { name: '02:54', ram: 1024, swap: 256 },
+  { name: '02:57', ram: 1024, swap: 256 },
+  { name: '03:00', ram: 1024, swap: 256 },
+  { name: '03:03', ram: 1024, swap: 256 },
+  { name: '03:06', ram: 1024, swap: 256 },
+  { name: '03:09', ram: 1024, swap: 256 },
+  { name: '03:12', ram: 1024, swap: 256 },
+  { name: '03:15', ram: 1024, swap: 256 },
+  { name: '03:18', ram: 1024, swap: 256 },
+  { name: '03:21', ram: 1024, swap: 256 },
+  { name: '03:24', ram: 1024, swap: 256 },
+  { name: '03:27', ram: 1024, swap: 256 },
+  { name: '03:30', ram: 1024, swap: 256 },
+  { name: '03:33', ram: 1024, swap: 256 },
+  { name: '03:36', ram: 1024, swap: 256 },
+  { name: '03:39', ram: 1024, swap: 256 },
+  { name: '03:42', ram: 1024, swap: 256 },
+  { name: '03:45', ram: 1024, swap: 256 },
+]
+
+const diskUsageData = [
+  { name: '02:48', disk: 10 },
+  { name: '02:51', disk: 20 },
+  { name: '02:54', disk: 30 },
+  { name: '02:57', disk: 40 },
+  { name: '03:00', disk: 50 },
+  { name: '03:03', disk: 60 },
+  { name: '03:06', disk: 50 },
+  { name: '03:09', disk: 40 },
+  { name: '03:12', disk: 30 },
+  { name: '03:15', disk: 20 },
+  { name: '03:18', disk: 10 },
+  { name: '03:21', disk: 20 },
+  { name: '03:24', disk: 30 },
+  { name: '03:27', disk: 40 },
+  { name: '03:30', disk: 50 },
+  { name: '03:33', disk: 60 },
+  { name: '03:36', disk: 50 },
+  { name: '03:39', disk: 40 },
+  { name: '03:42', disk: 30 },
+  { name: '03:45', disk: 20 },
+]
+
+const diskPartitionData = [
+  { label: '/dev/root', usage: 14.27, total: 19.38 },
+  { label: '/dev/sda1', usage: 14.27, total: 19.38 },
+  { label: '/dev/sda2', usage: 14.27, total: 19.38 },
+  { label: '/dev/sda3', usage: 14.27, total: 19.38 },
+  { label: '/dev/sda4', usage: 14.27, total: 19.38 },
+  { label: '/dev/sda5', usage: 14.27, total: 19.38 },
+  { label: '/dev/sda6', usage: 14.27, total: 19.38 },
+]
+
 const timeframeOptions = [
   {
     label: 'Monthly',
@@ -118,6 +197,12 @@ export default function ServerDetailRoute() {
   const [networkUsageTimeframe, setNetworkUsageTimeframe] =
     useState<Timeframe>('hourly')
   const [latencyTimeframe, setLatencyTimeframe] = useState<Timeframe>('hourly')
+  const [averageLoadTimeframe, setAverageLoadTimeframe] =
+    useState<Timeframe>('hourly')
+  const [memoryUsageTimeframe, setMemoryUsageTimeframe] =
+    useState<Timeframe>('hourly')
+  const [diskUsageTimeframe, setDiskUsageTimeframe] =
+    useState<Timeframe>('hourly')
 
   const handleNetworkUsageTimeframeChange = (value: string) => {
     if (value === 'monthly' || value === 'daily' || value === 'hourly') {
@@ -132,6 +217,30 @@ export default function ServerDetailRoute() {
       setLatencyTimeframe(value)
     } else {
       setLatencyTimeframe('hourly')
+    }
+  }
+
+  const handleAverageLoadTimeframeChange = (value: string) => {
+    if (value === 'monthly' || value === 'daily' || value === 'hourly') {
+      setAverageLoadTimeframe(value)
+    } else {
+      setAverageLoadTimeframe('hourly')
+    }
+  }
+
+  const handleMemoryUsageTimeframeChange = (value: string) => {
+    if (value === 'monthly' || value === 'daily' || value === 'hourly') {
+      setMemoryUsageTimeframe(value)
+    } else {
+      setMemoryUsageTimeframe('hourly')
+    }
+  }
+
+  const handleDiskUsageTimeframeChange = (value: string) => {
+    if (value === 'monthly' || value === 'daily' || value === 'hourly') {
+      setDiskUsageTimeframe(value)
+    } else {
+      setDiskUsageTimeframe('hourly')
     }
   }
 
@@ -155,6 +264,21 @@ export default function ServerDetailRoute() {
       <LatencySection
         timeframe={latencyTimeframe}
         onTimeframeChange={handleLatencyTimeframeChange}
+      />
+
+      <AverageLoadSection
+        timeframe={averageLoadTimeframe}
+        onTimeframeChange={handleAverageLoadTimeframeChange}
+      />
+
+      <MemoryUsageSection
+        timeframe={memoryUsageTimeframe}
+        onTimeframeChange={handleMemoryUsageTimeframeChange}
+      />
+
+      <DiskUsageSection
+        timeframe={diskUsageTimeframe}
+        onTimeframeChange={handleDiskUsageTimeframeChange}
       />
     </div>
   )
@@ -465,6 +589,221 @@ function LatencySection({
                 </span>
               </td>
             </tr>
+          </tbody>
+        </table>
+      </Card>
+    </Card>
+  )
+}
+
+function AverageLoadSection({
+  timeframe,
+  onTimeframeChange,
+}: {
+  timeframe: Timeframe
+  onTimeframeChange: (value: string) => void
+}) {
+  return (
+    <Card className="p-6">
+      <div className="flex flex-wrap gap-2">
+        <div className="flex grow items-baseline gap-2 text-slate-600">
+          <h3 className="text-2xl font-medium">Average Load</h3>
+          <div>with CPU & Disk IO</div>
+        </div>
+        <Tabs value={timeframe} onValueChange={onTimeframeChange}>
+          <TabsList>
+            {timeframeOptions.map((option) => (
+              <TabsTrigger key={option.value} value={option.value}>
+                {option.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
+      <Separator className="my-4" />
+      <div className="my-8 h-60 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            width={500}
+            height={300}
+            data={averageLoadData}
+            margin={{
+              top: 5,
+              right: 30,
+              bottom: 5,
+              left: -15,
+            }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="name" />
+            <YAxis axisLine={false} tickLine={false} />
+            <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="disk_io"
+              stroke="#FFB946"
+              strokeWidth={3}
+              activeDot={{ r: 8 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="cpu"
+              stroke="#00AEE7"
+              strokeWidth={3}
+              activeDot={{ r: 8 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="system"
+              stroke="#5CCE43"
+              strokeWidth={3}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </Card>
+  )
+}
+
+function MemoryUsageSection({
+  timeframe,
+  onTimeframeChange,
+}: {
+  timeframe: Timeframe
+  onTimeframeChange: (value: string) => void
+}) {
+  return (
+    <Card className="p-6">
+      <div className="flex flex-wrap gap-2">
+        <div className="flex grow items-baseline gap-2 text-slate-600">
+          <h3 className="text-2xl font-medium">RAM</h3>
+          <div>& SWAP</div>
+        </div>
+        <Tabs value={timeframe} onValueChange={onTimeframeChange}>
+          <TabsList>
+            {timeframeOptions.map((option) => (
+              <TabsTrigger key={option.value} value={option.value}>
+                {option.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
+      <Separator className="my-4" />
+      <div className="my-8 h-60 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            width={500}
+            height={300}
+            data={memoryUsageData}
+            margin={{
+              top: 5,
+              right: 30,
+              bottom: 5,
+              left: -15,
+            }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="name" />
+            <YAxis axisLine={false} tickLine={false} />
+            <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="swap"
+              stroke="#00AEE7"
+              strokeWidth={3}
+              activeDot={{ r: 8 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="ram"
+              stroke="#5CCE43"
+              strokeWidth={3}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </Card>
+  )
+}
+
+function DiskUsageSection({
+  timeframe,
+  onTimeframeChange,
+}: {
+  timeframe: Timeframe
+  onTimeframeChange: (value: string) => void
+}) {
+  return (
+    <Card className="p-6">
+      <div className="flex flex-wrap gap-2">
+        <div className="flex grow items-baseline gap-2 text-slate-600">
+          <h3 className="text-2xl font-medium">Disk Usage</h3>
+          <div>in Total</div>
+        </div>
+        <Tabs value={timeframe} onValueChange={onTimeframeChange}>
+          <TabsList>
+            {timeframeOptions.map((option) => (
+              <TabsTrigger key={option.value} value={option.value}>
+                {option.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
+      <Separator className="my-4" />
+      <div className="my-8 h-60 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            width={500}
+            height={300}
+            data={diskUsageData}
+            margin={{
+              top: 5,
+              right: 30,
+              bottom: 5,
+              left: -15,
+            }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="name" />
+            <YAxis axisLine={false} tickLine={false} />
+            <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="disk"
+              stroke="#5CCE43"
+              strokeWidth={3}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+      <Card className="overflow-x-auto">
+        <table className="w-full table-auto">
+          <thead className="border-b">
+            <tr className="*:px-4 *:py-2 *:text-start *:font-medium *:text-neutral-400">
+              <th className="flex items-baseline gap-1.5">Label</th>
+              <th>Usage</th>
+              <th>Total</th>
+              <th className="w-20"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {diskPartitionData.map((partition) => (
+              <tr
+                key={partition.label}
+                className="*:px-4 *:py-2 *:text-slate-700"
+              >
+                <td>{partition.label}</td>
+                <td>{partition.usage} GB</td>
+                <td>{partition.total} GB</td>
+                <td className="flex justify-end">
+                  <div className="relative h-3 w-full overflow-clip rounded-[3px] bg-muted">
+                    <div className="absolute h-full w-2 bg-brand"></div>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </Card>
