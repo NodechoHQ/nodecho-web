@@ -71,6 +71,29 @@ const networkUsageData = [
   { name: '03:45', rx: 20, tx: 10 },
 ]
 
+const latencyData = [
+  { name: '02:48', europe: 100, usa: 150, asia: 200 },
+  { name: '02:51', europe: 110, usa: 160, asia: 210 },
+  { name: '02:54', europe: 120, usa: 170, asia: 220 },
+  { name: '02:57', europe: 130, usa: 180, asia: 230 },
+  { name: '03:00', europe: 140, usa: 190, asia: 240 },
+  { name: '03:03', europe: 150, usa: 200, asia: 250 },
+  { name: '03:06', europe: 140, usa: 190, asia: 240 },
+  { name: '03:09', europe: 130, usa: 180, asia: 230 },
+  { name: '03:12', europe: 120, usa: 170, asia: 220 },
+  { name: '03:15', europe: 110, usa: 160, asia: 210 },
+  { name: '03:18', europe: 100, usa: 150, asia: 200 },
+  { name: '03:21', europe: 110, usa: 160, asia: 210 },
+  { name: '03:24', europe: 120, usa: 170, asia: 220 },
+  { name: '03:27', europe: 130, usa: 180, asia: 230 },
+  { name: '03:30', europe: 140, usa: 190, asia: 240 },
+  { name: '03:33', europe: 150, usa: 200, asia: 250 },
+  { name: '03:36', europe: 140, usa: 190, asia: 240 },
+  { name: '03:39', europe: 130, usa: 180, asia: 230 },
+  { name: '03:42', europe: 120, usa: 170, asia: 220 },
+  { name: '03:45', europe: 110, usa: 160, asia: 210 },
+]
+
 const timeframeOptions = [
   {
     label: 'Monthly',
@@ -94,12 +117,21 @@ export default function ServerDetailRoute() {
 
   const [networkUsageTimeframe, setNetworkUsageTimeframe] =
     useState<Timeframe>('hourly')
+  const [latencyTimeframe, setLatencyTimeframe] = useState<Timeframe>('hourly')
 
   const handleNetworkUsageTimeframeChange = (value: string) => {
     if (value === 'monthly' || value === 'daily' || value === 'hourly') {
       setNetworkUsageTimeframe(value)
     } else {
       setNetworkUsageTimeframe('hourly')
+    }
+  }
+
+  const handleLatencyTimeframeChange = (value: string) => {
+    if (value === 'monthly' || value === 'daily' || value === 'hourly') {
+      setLatencyTimeframe(value)
+    } else {
+      setLatencyTimeframe('hourly')
     }
   }
 
@@ -118,6 +150,11 @@ export default function ServerDetailRoute() {
       <NetworkUsageSection
         timeframe={networkUsageTimeframe}
         onTimeframeChange={handleNetworkUsageTimeframeChange}
+      />
+
+      <LatencySection
+        timeframe={latencyTimeframe}
+        onTimeframeChange={handleLatencyTimeframeChange}
       />
     </div>
   )
@@ -325,6 +362,108 @@ function NetworkUsageSection({
               <td>192.168.0.1</td>
               <td>2024:0217:19:3223::1</td>
               <td>2745.47 MB</td>
+            </tr>
+          </tbody>
+        </table>
+      </Card>
+    </Card>
+  )
+}
+
+function LatencySection({
+  timeframe,
+  onTimeframeChange,
+}: {
+  timeframe: Timeframe
+  onTimeframeChange: (value: string) => void
+}) {
+  return (
+    <Card className="p-6">
+      <div className="flex flex-wrap gap-2">
+        <div className="flex grow items-baseline gap-2 text-slate-600">
+          <h3 className="text-2xl font-medium">Latency</h3>
+          <div>to Europe, USA & Asia</div>
+        </div>
+        <Tabs value={timeframe} onValueChange={onTimeframeChange}>
+          <TabsList>
+            {timeframeOptions.map((option) => (
+              <TabsTrigger key={option.value} value={option.value}>
+                {option.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
+      <Separator className="my-4" />
+      <div className="my-8 h-60 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            width={500}
+            height={300}
+            data={latencyData}
+            margin={{
+              top: 5,
+              right: 30,
+              bottom: 5,
+              left: -15,
+            }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="name" />
+            <YAxis axisLine={false} tickLine={false} />
+            <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="asia"
+              stroke="#FFB946"
+              strokeWidth={3}
+              activeDot={{ r: 8 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="usa"
+              stroke="#00AEE7"
+              strokeWidth={3}
+              activeDot={{ r: 8 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="europe"
+              stroke="#5CCE43"
+              strokeWidth={3}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+      <Card className="overflow-x-auto">
+        <table className="w-full table-auto">
+          <thead className="border-b">
+            <tr className="*:px-4 *:py-2 *:text-start *:font-medium *:text-neutral-400">
+              <th className="flex items-baseline gap-1.5">Europe</th>
+              <th>USA</th>
+              <th>Asia</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="*:px-4 *:py-2 *:text-slate-700">
+              <td>
+                Milan, Italy
+                <span className="ml-2 text-sm font-light text-green-500">
+                  Online
+                </span>
+              </td>
+              <td>
+                Dallas, Texas
+                <span className="ml-2 text-sm font-light text-green-500">
+                  Online
+                </span>
+              </td>
+              <td>
+                Pune, India
+                <span className="ml-2 text-sm font-light text-green-500">
+                  Online
+                </span>
+              </td>
             </tr>
           </tbody>
         </table>
