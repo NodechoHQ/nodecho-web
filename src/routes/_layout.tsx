@@ -6,7 +6,17 @@ import { Header } from '@/components/layout/Header.tsx'
 import { Footer } from '@/components/layout/Footer.tsx'
 import { Toaster } from 'sonner'
 
-export default function Layout() {
+export const RootLayout = () => {
+  return (
+    <>
+      <Outlet />
+      <ScrollRestoration />
+      <Toaster richColors />
+    </>
+  )
+}
+
+export const AppLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
@@ -34,10 +44,6 @@ export default function Layout() {
 
         <Footer />
       </div>
-
-      <ScrollRestoration />
-
-      <Toaster richColors />
     </>
   )
 }
