@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import NewServer from '@/routes/servers.new.tsx'
 import ServerDetail from '@/routes/servers.$id.tsx'
 import InstallAgent from '@/routes/servers.$id.install-agent.tsx'
+import Login from '@/routes/login.tsx'
 import Signup from '@/routes/signup.tsx'
 
 const queryClient = new QueryClient()
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
         <Route path="/servers/:sid" element={<ServerDetail />} />
         <Route path="/servers/:sid/install-agent" element={<InstallAgent />} />
       </Route>
+      <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
     </Route>,
   ),
