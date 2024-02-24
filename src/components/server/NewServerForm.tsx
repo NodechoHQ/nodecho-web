@@ -112,11 +112,7 @@ export function NewServerForm({ onCreateServer }: Props) {
                       </div>
 
                       <FormControl>
-                        <Input
-                          autoComplete="name"
-                          className="text-base"
-                          {...field}
-                        />
+                        <Input autoComplete="name" {...field} />
                       </FormControl>
 
                       <FormMessage />
@@ -170,7 +166,7 @@ export function NewServerForm({ onCreateServer }: Props) {
                                 min={1}
                                 max={120}
                                 step={1}
-                                className="-my-1 mx-2 h-8 w-16 bg-white text-center text-base"
+                                className="-my-1 mx-2 h-8 w-16 bg-white text-center"
                                 {...field}
                               />
                             </FormControl>
@@ -381,7 +377,7 @@ function ResourceUsageNotificationFormItem<TName extends ResourceCategoryName>({
               min={1}
               max={100}
               step={1}
-              className="h-8 w-16 text-center text-base"
+              className="h-8 w-16 text-center"
               {...field}
             />
           </FormControl>
