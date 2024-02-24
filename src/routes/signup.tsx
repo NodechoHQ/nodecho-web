@@ -70,7 +70,7 @@ export default function SignupRoute() {
                   <FormItem>
                     <FormLabel>Full Name</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input className="text-base" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -84,7 +84,12 @@ export default function SignupRoute() {
                   <FormItem>
                     <FormLabel>Email Address</FormLabel>
                     <FormControl>
-                      <Input type="email" autoComplete="email" {...field} />
+                      <Input
+                        type="email"
+                        autoComplete="email"
+                        className="text-base"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -101,6 +106,7 @@ export default function SignupRoute() {
                       <Input
                         type="password"
                         autoComplete="current-password"
+                        className="text-base"
                         {...field}
                       />
                     </FormControl>

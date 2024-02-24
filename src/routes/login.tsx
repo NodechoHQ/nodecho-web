@@ -68,7 +68,12 @@ export default function LoginRoute() {
                   <FormItem>
                     <FormLabel>Email Address</FormLabel>
                     <FormControl>
-                      <Input type="email" autoComplete="email" {...field} />
+                      <Input
+                        type="email"
+                        autoComplete="email"
+                        className="text-base"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -85,6 +90,7 @@ export default function LoginRoute() {
                       <Input
                         type="password"
                         autoComplete="current-password"
+                        className="text-base"
                         {...field}
                       />
                     </FormControl>
