@@ -22,6 +22,14 @@ import {
 import { useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs.tsx'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 
 const data = {
   name: 'Server Name',
@@ -463,32 +471,36 @@ function NetworkUsageSection({
         </ResponsiveContainer>
       </div>
       <Card className="overflow-x-auto">
-        <table className="w-full table-auto">
-          <thead className="border-b">
-            <tr className="*:px-4 *:py-2 *:text-start *:font-medium *:text-neutral-400">
-              <th className="flex items-baseline gap-1.5">
-                Network Information
-                <div className="text-sm font-light">
-                  by <a className="text-brand">Maxmind</a>
+        <Table className="table-auto">
+          <TableHeader>
+            <TableRow>
+              <TableHead>
+                <div className="flex items-baseline gap-1.5 text-nowrap">
+                  Network Information
+                  <div className="text-sm font-light">
+                    by <a className="text-brand">Maxmind</a>
+                  </div>
                 </div>
-              </th>
-              <th>IPv4</th>
-              <th>IPv6</th>
-              <th className="flex items-center">
-                Total
-                <ArrowUpDownIcon className="ml-1 size-4" />
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="*:px-4 *:py-2 *:text-slate-700">
-              <td>Canada AS12345 OVH Systems</td>
-              <td>192.168.0.1</td>
-              <td>2024:0217:19:3223::1</td>
-              <td>2745.47 MB</td>
-            </tr>
-          </tbody>
-        </table>
+              </TableHead>
+              <TableHead>IPv4</TableHead>
+              <TableHead>IPv6</TableHead>
+              <TableHead>
+                <div className="flex items-center">
+                  Total
+                  <ArrowUpDownIcon className="ml-1 size-4" />
+                </div>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>Canada AS12345 OVH Systems</TableCell>
+              <TableCell>192.168.0.1</TableCell>
+              <TableCell>2024:0217:19:3223::1</TableCell>
+              <TableCell>2745.47 MB</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </Card>
     </Card>
   )
@@ -560,37 +572,37 @@ function LatencySection({
         </ResponsiveContainer>
       </div>
       <Card className="overflow-x-auto">
-        <table className="w-full table-auto">
-          <thead className="border-b">
-            <tr className="*:px-4 *:py-2 *:text-start *:font-medium *:text-neutral-400">
-              <th className="flex items-baseline gap-1.5">Europe</th>
-              <th>USA</th>
-              <th>Asia</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="*:px-4 *:py-2 *:text-slate-700">
-              <td>
+        <Table className="table-auto">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Europe</TableHead>
+              <TableHead>USA</TableHead>
+              <TableHead>Asia</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>
                 Milan, Italy
                 <span className="ml-2 text-sm font-light text-green-500">
                   Online
                 </span>
-              </td>
-              <td>
+              </TableCell>
+              <TableCell>
                 Dallas, Texas
                 <span className="ml-2 text-sm font-light text-green-500">
                   Online
                 </span>
-              </td>
-              <td>
+              </TableCell>
+              <TableCell>
                 Pune, India
                 <span className="ml-2 text-sm font-light text-green-500">
                   Online
                 </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </Card>
     </Card>
   )
@@ -779,33 +791,30 @@ function DiskUsageSection({
         </ResponsiveContainer>
       </div>
       <Card className="overflow-x-auto">
-        <table className="w-full table-auto">
-          <thead className="border-b">
-            <tr className="*:px-4 *:py-2 *:text-start *:font-medium *:text-neutral-400">
-              <th className="flex items-baseline gap-1.5">Label</th>
-              <th>Usage</th>
-              <th>Total</th>
-              <th className="w-20"></th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table className="table-auto">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Label</TableHead>
+              <TableHead>Usage</TableHead>
+              <TableHead>Total</TableHead>
+              <TableHead className="w-20"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {diskPartitionData.map((partition) => (
-              <tr
-                key={partition.label}
-                className="*:px-4 *:py-2 *:text-slate-700"
-              >
-                <td>{partition.label}</td>
-                <td>{partition.usage} GB</td>
-                <td>{partition.total} GB</td>
-                <td className="flex justify-end">
+              <TableRow key={partition.label}>
+                <TableCell>{partition.label}</TableCell>
+                <TableCell>{partition.usage} GB</TableCell>
+                <TableCell>{partition.total} GB</TableCell>
+                <TableCell className="flex justify-end">
                   <div className="relative h-3 w-full overflow-clip rounded-[3px] bg-muted">
                     <div className="absolute h-full w-2 bg-brand"></div>
                   </div>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </Card>
     </Card>
   )
