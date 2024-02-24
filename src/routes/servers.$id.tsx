@@ -493,7 +493,7 @@ function NetworkUsageSection({
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
+            <TableRow className="*:text-nowrap">
               <TableCell>Canada AS12345 OVH Systems</TableCell>
               <TableCell>192.168.0.1</TableCell>
               <TableCell>2024:0217:19:3223::1</TableCell>
@@ -581,7 +581,7 @@ function LatencySection({
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
+            <TableRow className="*:text-nowrap">
               <TableCell>
                 Milan, Italy
                 <span className="ml-2 text-sm font-light text-green-500">
@@ -802,7 +802,7 @@ function DiskUsageSection({
           </TableHeader>
           <TableBody>
             {diskPartitionData.map((partition) => (
-              <TableRow key={partition.label}>
+              <TableRow key={partition.label} className="*:text-nowrap">
                 <TableCell>{partition.label}</TableCell>
                 <TableCell>{partition.usage} GB</TableCell>
                 <TableCell>{partition.total} GB</TableCell>
