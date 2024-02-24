@@ -54,7 +54,7 @@ export default function SignupRoute() {
   }
 
   return (
-    <div className="flex min-h-screen flex-1 flex-col justify-center bg-brand-background py-8 sm:px-6 sm:py-12 lg:px-8">
+    <div className="flex min-h-dvh flex-1 flex-col justify-center bg-brand-background py-8 sm:px-6 sm:py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Logo theme="light" size="lg" />
       </div>
