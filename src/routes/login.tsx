@@ -12,10 +12,13 @@ import {
 } from '@/components/ui/form.tsx'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
+import * as apiService from '@/services/api-service'
+import { LocalStorageKeys } from '@/lib/constants'
+import { LoginResponse } from '@/types/dto'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -31,15 +34,17 @@ export default function LoginRoute() {
     },
   })
 
+  const navigate = useNavigate()
+
   const { mutate: login, isPending: isLoggingIn } = useMutation({
-    mutationFn: async (data: z.infer<typeof formSchema>) => {
-      // FIXME: Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      console.log('login', data)
+    mutationFn: (data: z.infer<typeof formSchema>) => {
+      return apiService.login({ email: data.email, password: data.password })
     },
-    onSuccess: () => {
+    onSuccess: (data: LoginResponse) => {
       toast.success('Logged in successfully')
       console.log('Logged in successfully')
+      localStorage.setItem(LocalStorageKeys.ACCESS_TOKEN, data.access_token)
+      navigate('/')
     },
     onError: (error) => {
       toast.error('Failed to login', { description: error.message })

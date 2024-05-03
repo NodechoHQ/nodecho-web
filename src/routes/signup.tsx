@@ -16,14 +16,15 @@ import { Link } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
+import * as apiService from '@/services/api-service'
 
 const formSchema = z.object({
-  fullName: z.string().min(3),
+  fullName: z.string().min(3).max(256),
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z.string().min(8).max(256),
 })
 
-export default function SignupRoute() {
+export default function SignUpRoute() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,9 +36,11 @@ export default function SignupRoute() {
 
   const { mutate: createAccount, isPending: isCreatingAccount } = useMutation({
     mutationFn: async (data: z.infer<typeof formSchema>) => {
-      // FIXME: Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      console.log('signup', data)
+      await apiService.register({
+        name: data.fullName,
+        email: data.email,
+        password: data.password,
+      })
     },
     onSuccess: () => {
       toast.success('Account created successfully')

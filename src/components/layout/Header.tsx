@@ -9,6 +9,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx'
 import { Logo } from '@/components/Logo.tsx'
+import { useMutation } from '@tanstack/react-query'
+import { LocalStorageKeys } from '@/lib/constants'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 interface HeaderProps extends React.ComponentProps<'header'> {
   onClickMenu: () => void
@@ -16,6 +20,23 @@ interface HeaderProps extends React.ComponentProps<'header'> {
 
 export const Header = React.forwardRef<React.ElementRef<'header'>, HeaderProps>(
   ({ className, onClickMenu, ...props }, ref) => {
+    const navigate = useNavigate()
+
+    const { mutate: logout } = useMutation({
+      mutationFn: async () => {
+        localStorage.removeItem(LocalStorageKeys.ACCESS_TOKEN)
+        navigate('/login')
+      },
+      onSuccess: () => {
+        toast.success('Logged out successfully')
+        console.log('Logged out successfully')
+      },
+      onError: (error) => {
+        toast.error('Failed to logout', { description: error.message })
+        console.error('Failed to logout', error)
+      },
+    })
+
     return (
       <header
         ref={ref}
@@ -79,7 +100,7 @@ export const Header = React.forwardRef<React.ElementRef<'header'>, HeaderProps>(
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => logout()}>
                   <LogOutIcon className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>

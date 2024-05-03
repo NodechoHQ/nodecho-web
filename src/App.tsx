@@ -1,6 +1,7 @@
 import {
   createBrowserRouter,
   createRoutesFromChildren,
+  LoaderFunction,
   redirect,
   Route,
   RouterProvider,
@@ -12,14 +13,32 @@ import NewServer from '@/routes/servers.new.tsx'
 import ServerDetail from '@/routes/servers.$id.tsx'
 import InstallAgent from '@/routes/servers.$id.install-agent.tsx'
 import Login from '@/routes/login.tsx'
-import Signup from '@/routes/signup.tsx'
+import SignUp from '@/routes/signup.tsx'
+import { LocalStorageKeys } from './lib/constants'
+import SignUpVerifyRoute from './routes/signup.verify'
+import * as apiService from './services/api-service'
 
 const queryClient = new QueryClient()
+
+const appLoader: LoaderFunction = async () => {
+  const accessToken = localStorage.getItem(LocalStorageKeys.ACCESS_TOKEN)
+  if (!accessToken) {
+    return redirect('/login')
+  }
+  const profile = await queryClient.fetchQuery({
+    queryKey: ['profile'],
+    queryFn: () => apiService.fetchProfile(),
+  })
+  if (!profile.emailVerifiedAt) {
+    return redirect('/signup/verify')
+  }
+  return null
+}
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
     <Route element={<RootLayout />}>
-      <Route element={<AppLayout />}>
+      <Route element={<AppLayout />} loader={appLoader}>
         <Route path="/" loader={() => redirect('/servers')} />
         <Route path="/servers" element={<Servers />} />
         <Route path="/servers/new" element={<NewServer />} />
@@ -27,7 +46,8 @@ const router = createBrowserRouter(
         <Route path="/servers/:sid/install-agent" element={<InstallAgent />} />
       </Route>
       <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/signup/verify" element={<SignUpVerifyRoute />} />
     </Route>,
   ),
 )
