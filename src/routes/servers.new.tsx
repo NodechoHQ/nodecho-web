@@ -1,15 +1,16 @@
-import { NewServerForm } from '@/components/server/NewServerForm.tsx'
+import { ServerForm } from '@/components/server/ServerForm'
+import { Server } from '@/types/dto'
 import { useNavigate } from 'react-router-dom'
 
 export default function NewServerRoute() {
   const navigate = useNavigate()
 
-  const onCreateServer = (server: { id: string; token: string }) => {
+  const onCreateServer = (server: Server) => {
     navigate(`/servers/${server.id}/install-agent`, {
       replace: true,
       state: { token: server.token },
     })
   }
 
-  return <NewServerForm onCreateServer={onCreateServer} />
+  return <ServerForm serverId={null} onDone={onCreateServer} />
 }

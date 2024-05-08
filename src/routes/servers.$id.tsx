@@ -19,7 +19,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs.tsx'
 import {
@@ -30,6 +30,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import * as apiService from '@/services/api-service'
+import { useQuery } from '@tanstack/react-query'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const data = {
   name: 'Server Name',
@@ -200,7 +203,10 @@ type Timeframe = (typeof timeframeOptions)[number]['value']
 
 export default function ServerDetailRoute() {
   const { sid } = useParams()
-  console.log('serverId: ', sid)
+
+  if (sid === undefined) {
+    throw new Error('Server ID is required')
+  }
 
   const [networkUsageTimeframe, setNetworkUsageTimeframe] =
     useState<Timeframe>('hourly')
@@ -254,7 +260,7 @@ export default function ServerDetailRoute() {
 
   return (
     <div className="flex flex-col gap-y-8">
-      <Header />
+      <Header serverId={+sid} />
 
       <StatisticsTable />
 
@@ -292,11 +298,20 @@ export default function ServerDetailRoute() {
   )
 }
 
-function Header() {
+function Header({ serverId }: { serverId: number }) {
+  const serverQuery = useQuery({
+    queryKey: ['servers', serverId],
+    queryFn: () => apiService.fetchServer(serverId),
+  })
+
   return (
     <div className="flex flex-wrap items-center justify-between gap-2">
       <div>
-        <h2 className="text-2xl">{data.name}</h2>
+        {serverQuery.data ? (
+          <h2 className="text-2xl">{serverQuery.data.name}</h2>
+        ) : (
+          <Skeleton className="h-8 w-[250px] opacity-10" />
+        )}
         <div className="flex">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <div className="flex items-center text-sm text-lime-500">
@@ -318,9 +333,11 @@ function Header() {
         </div>
       </div>
 
-      <Button variant="brand">
-        <EditIcon strokeWidth={3} className="mr-2 size-4" />
-        Edit Server
+      <Button variant="brand" asChild>
+        <Link to={`/servers/${serverId}/edit`}>
+          <EditIcon strokeWidth={3} className="mr-2 size-4" />
+          Edit Server
+        </Link>
       </Button>
     </div>
   )

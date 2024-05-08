@@ -4,19 +4,12 @@ import * as React from 'react'
 import { cn } from '@/lib/utils.ts'
 import { ServerCard } from '@/components/server/ServerCard.tsx'
 import { Link } from 'react-router-dom'
-
-const serverList = Array(10)
-  .fill(0)
-  .map((_, idx) => ({ id: idx }))
+import * as apiService from '@/services/api-service'
 
 export function ServerList() {
   const { data, isPending, isError, error } = useQuery({
     queryKey: ['servers'],
-    queryFn: async () => {
-      // throw new Error('Authentication Required.')
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      return serverList
-    },
+    queryFn: () => apiService.fetchServers(),
   })
 
   if (isPending) {
@@ -58,7 +51,7 @@ export function ServerList() {
     <ListContainer className="empty:hidden">
       {data.map((server) => (
         <Link to={`/servers/${server.id}`} key={server.id}>
-          <ServerCard idx={server.id} />
+          <ServerCard server={server} />
         </Link>
       ))}
     </ListContainer>

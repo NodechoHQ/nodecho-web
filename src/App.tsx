@@ -10,6 +10,7 @@ import { RootLayout, AppLayout } from '@/routes/_layout.tsx'
 import Servers from '@/routes/servers.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import NewServer from '@/routes/servers.new.tsx'
+import EditServer from '@/routes/servers.$id.edit.tsx'
 import ServerDetail from '@/routes/servers.$id.tsx'
 import InstallAgent from '@/routes/servers.$id.install-agent.tsx'
 import Login from '@/routes/login.tsx'
@@ -43,6 +44,7 @@ const router = createBrowserRouter(
         <Route path="/servers" element={<Servers />} />
         <Route path="/servers/new" element={<NewServer />} />
         <Route path="/servers/:sid" element={<ServerDetail />} />
+        <Route path="/servers/:sid/edit" element={<EditServer />} />
         <Route path="/servers/:sid/install-agent" element={<InstallAgent />} />
       </Route>
       <Route path="/login" element={<Login />} />

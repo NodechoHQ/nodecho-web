@@ -27,6 +27,8 @@ import { Button } from '@/components/ui/button.tsx'
 import { Slider } from '@/components/ui/slider.tsx'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import * as apiService from '@/services/api-service'
+import { Server } from '@/types/dto'
 
 const formSchema = z.object({
   name: z.string().min(1).max(255),
@@ -44,47 +46,100 @@ const formSchema = z.object({
 })
 
 type Props = {
-  onCreateServer: (data: { id: string; token: string }) => void
+  serverId: number | null
+  onDone: (server: Server) => void
 }
 
-export function NewServerForm({ onCreateServer }: Props) {
+export function ServerForm({ serverId, onDone }: Props) {
   const navigate = useNavigate()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      enableDataLossNotification: true,
-      dataLossNotificationConfig: {
-        missedIntervalThreshold: 1,
-        performAdditionalPingCheck: true,
-      },
-      enableResourceUsageNotification: true,
-      resourceUsageNotificationConfig: {
-        systemLoadThreshold: 80,
-        memoryUsageThreshold: 80,
-        diskUsageThreshold: 80,
-      },
-    },
+    defaultValues: serverId
+      ? async () => {
+          const server = await apiService.fetchServer(serverId)
+          return {
+            name: server.name,
+            enableDataLossNotification: server.dataLossAlertEnabled,
+            dataLossNotificationConfig: {
+              missedIntervalThreshold: server.missedDataThreshold,
+              performAdditionalPingCheck: server.additionalPingCheckEnabled,
+            },
+            enableResourceUsageNotification: server.resourceUsageAlertEnabled,
+            resourceUsageNotificationConfig: {
+              systemLoadThreshold: server.systemLoadThreshold,
+              memoryUsageThreshold: server.ramUsageThreshold,
+              diskUsageThreshold: server.diskUsageThreshold,
+            },
+          }
+        }
+      : {
+          name: '',
+          enableDataLossNotification: true,
+          dataLossNotificationConfig: {
+            missedIntervalThreshold: 1,
+            performAdditionalPingCheck: true,
+          },
+          enableResourceUsageNotification: true,
+          resourceUsageNotificationConfig: {
+            systemLoadThreshold: 80,
+            memoryUsageThreshold: 80,
+            diskUsageThreshold: 80,
+          },
+        },
   })
 
-  const { mutate: createServer, isPending: isCreatingServer } = useMutation({
+  const { mutate: submitForm, isPending: isSubmitting } = useMutation({
     mutationFn: async (data: z.infer<typeof formSchema>) => {
-      console.log(JSON.stringify(data, null, 2))
-      // FIXME: Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      return { id: 'mock_server_id', token: 'mock_token-mock_token-mock_token' }
+      if (serverId) {
+        const updatedServer = await apiService.updateServer(serverId, {
+          name: data.name,
+          dataLossAlertEnabled: data.enableDataLossNotification,
+          missedDataThreshold:
+            data.dataLossNotificationConfig.missedIntervalThreshold,
+          additionalPingCheck:
+            data.dataLossNotificationConfig.performAdditionalPingCheck,
+          resourceUsageAlertEnabled: data.enableResourceUsageNotification,
+          systemLoadThreshold:
+            data.resourceUsageNotificationConfig.systemLoadThreshold,
+          memoryUsageThreshold:
+            data.resourceUsageNotificationConfig.memoryUsageThreshold,
+          diskUsageThreshold:
+            data.resourceUsageNotificationConfig.diskUsageThreshold,
+        })
+        return updatedServer
+      } else {
+        const newServer = await apiService.createServer({
+          name: data.name,
+          dataLossAlertEnabled: data.enableDataLossNotification,
+          missedDataThreshold:
+            data.dataLossNotificationConfig.missedIntervalThreshold,
+          additionalPingCheck:
+            data.dataLossNotificationConfig.performAdditionalPingCheck,
+          resourceUsageAlertEnabled: data.enableResourceUsageNotification,
+          systemLoadThreshold:
+            data.resourceUsageNotificationConfig.systemLoadThreshold,
+          memoryUsageThreshold:
+            data.resourceUsageNotificationConfig.memoryUsageThreshold,
+          diskUsageThreshold:
+            data.resourceUsageNotificationConfig.diskUsageThreshold,
+        })
+        return newServer
+      }
     },
-    onSuccess: (data) => {
-      onCreateServer(data)
-      toast.success('Server created')
+    onSuccess: (server: Server) => {
+      onDone(server)
+      toast.success(serverId ? 'Server updated' : 'Server created')
     },
     onError: (error) => {
-      toast.error('Server creation failed', { description: error.message })
+      toast.error(
+        serverId ? 'Server update failed' : 'Server creation failed',
+        { description: error.message },
+      )
     },
   })
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    createServer(data)
+    submitForm(data)
   }
 
   return (
@@ -93,7 +148,9 @@ export function NewServerForm({ onCreateServer }: Props) {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <Card className="mx-auto max-w-[600px]">
             <CardHeader>
-              <CardTitle className="mx-auto">New Server</CardTitle>
+              <CardTitle className="mx-auto">
+                {serverId ? 'Edit Server' : 'New Server'}
+              </CardTitle>
               <CardDescription />
             </CardHeader>
             <Separator />
@@ -283,11 +340,17 @@ export function NewServerForm({ onCreateServer }: Props) {
               </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit" variant="brand" disabled={isCreatingServer}>
-                {isCreatingServer && (
+              <Button type="submit" variant="brand" disabled={isSubmitting}>
+                {isSubmitting && (
                   <Loader2 className="mr-2 size-4 animate-spin" />
                 )}
-                {isCreatingServer ? 'Creating Server...' : 'Create Server'}
+                {isSubmitting
+                  ? serverId
+                    ? 'Updating Server...'
+                    : 'Creating Server...'
+                  : serverId
+                    ? 'Update Server'
+                    : 'Create Server'}
               </Button>
             </CardFooter>
           </Card>
@@ -296,10 +359,12 @@ export function NewServerForm({ onCreateServer }: Props) {
 
       <Button
         className="mx-auto mt-8 w-full max-w-[600px] bg-brand-background-700 text-slate-300 hover:bg-brand-background-600"
-        onClick={() => navigate('/servers')}
+        onClick={() => navigate(serverId ? `/servers/${serverId}` : '/servers')}
       >
-        <ChevronLeftIcon className="mr-2 size-4" />I don't want to create a new
-        server
+        <ChevronLeftIcon className="mr-2 size-4" />
+        {serverId
+          ? "I don't want to edit this server"
+          : "I don't want to create a new server"}
       </Button>
     </div>
   )

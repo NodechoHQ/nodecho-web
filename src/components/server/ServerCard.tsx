@@ -1,25 +1,16 @@
-import { useState } from 'react'
 import { cn } from '@/lib/utils.ts'
 import { ArrowDownUpIcon, CheckCircle2Icon } from 'lucide-react'
 import { Separator } from '@/components/ui/separator.tsx'
 import { cva, VariantProps } from 'class-variance-authority'
 import * as React from 'react'
 import * as ProgressPrimitive from '@radix-ui/react-progress'
+import { Server } from '@/types/dto'
 
 type Props = {
-  idx: number
+  server: Server
 }
 
-export function ServerCard({ idx }: Props) {
-  const [mockLoadValue] = useState((idx + 1) * 10)
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setMockLoadValue((prev) => (prev + 3) % 100)
-  //   }, 1000)
-  //   return () => clearInterval(interval)
-  // }, [])
-
+export function ServerCard({ server }: Props) {
   return (
     <li className="rounded-md bg-white p-4 text-black shadow">
       {/* Status */}
@@ -33,9 +24,7 @@ export function ServerCard({ idx }: Props) {
       </div>
 
       {/* Title */}
-      <h3 className="mt-2 truncate text-lg text-slate-700">
-        VPS {idx} - Direct to Shanghai then California
-      </h3>
+      <h3 className="mt-2 truncate text-lg text-slate-700">{server.name}</h3>
 
       {/* Network */}
       <div className="mt-1 flex items-center text-sm font-light text-neutral-400">
@@ -51,24 +40,24 @@ export function ServerCard({ idx }: Props) {
         <li className="flex items-center">
           <div className="w-12 text-xs text-slate-400">Load</div>
           <Progress
-            value={mockLoadValue}
-            variant={calcServerProgressVariant(mockLoadValue)}
+            value={8}
+            variant={calcServerProgressVariant(8)}
             className="rounded"
           />
         </li>
         <li className="flex items-center">
           <div className="w-12 text-xs text-slate-400">RAM</div>
           <Progress
-            value={mockLoadValue}
-            variant={calcServerProgressVariant(mockLoadValue)}
+            value={20}
+            variant={calcServerProgressVariant(20)}
             className="rounded"
           />
         </li>
         <li className="flex items-center">
           <div className="w-12 text-xs text-slate-400">Disk</div>
           <Progress
-            value={mockLoadValue}
-            variant={calcServerProgressVariant(mockLoadValue)}
+            value={40}
+            variant={calcServerProgressVariant(40)}
             className="rounded"
           />
         </li>
